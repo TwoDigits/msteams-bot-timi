@@ -1,8 +1,10 @@
-//
-// Copyright (c) Microsoft. All rights reserved.
-// Licensed under the MIT license.
-//
+const http = require('http');
 const crypto = require('crypto');
+const commandParser = require('./commandParser');
+const commands = require('./commands');
+
+const cmd = new commands();
+const cmdParser = new commandParser(cmd.getHandlers());
 
 const sharedSecret = process.env.shared_secret
 if(!sharedSecret) {
@@ -10,7 +12,6 @@ if(!sharedSecret) {
 }
 
 const bufSecret = Buffer(sharedSecret, "base64");
-var http = require('http');
 var PORT = process.env.port || process.env.PORT || 8080;
 
 http.createServer(function(request, response) {
@@ -30,10 +31,11 @@ http.createServer(function(request, response) {
 			}
 
 			var receivedMsg = JSON.parse(payload);
-			var responseMsg = '{ "type": "message", "text": "You typed: ' + receivedMsg.text + '" }';
+			var answer = cmdParser.handle(receivedMsg.text)
+			var responseBody = JSON.stringify({'type': 'message', 'text': answer});
 
 			response.writeHead(200);
-			response.write(responseMsg);
+			response.write(responseBody);
 			response.end();
 		}
 		catch (err) {
