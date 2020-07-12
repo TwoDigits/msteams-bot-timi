@@ -23,7 +23,7 @@ This project is an implementation of a very simple [Outgoing Webhook](https://do
   git clone https://github.com/OfficeDev/msteams-samples-outgoing-webhook-nodejs.git
   ```
 
-* Install Node: https://nodejs.org/en/download/    
+* Install Node: https://nodejs.org/en/download/
 
 * Install a tunnelling service. These instructions assume you are using ngrok: https://ngrok.com/
 
